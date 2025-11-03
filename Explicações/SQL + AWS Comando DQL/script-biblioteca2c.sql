@@ -69,20 +69,10 @@ GO
 -- COUNT: Contar o total de registros
 SELECT * FROM Leitor;
 
-SELECT COUNT(*) AS QntLeitore
+SELECT COUNT(*) AS QntLeitores
 FROM Leitor;
 
 SELECT * FROM Emprestimo;
-
--- COUNT: Contar o total de registros
-
-SELECT * FROM Leitor;
-
-SELECT COUNT(*) AS QtdLeitores
-FROM Leitor;
-
-SELECT * FROM Emprestimo;
-
 -- COUNT + GROUP BY 
 -- (função agregada precisa do GROUP BY para mais atributos)
 
@@ -189,16 +179,16 @@ FROM Emprestimo;
 SELECT data_emprestimo,
 YEAR(data_emprestimo) AS Ano,
 MONTH(data_emprestimo) AS Mes,
-DAY(data_emprestimo) AS Dia,
+DAY(data_emprestimo) AS Dia
 FROM Emprestimo;
 
 SET LANGUAGE Portuguese;
 
 -- DATEPART/ DATENAME
 SELECT  DATEPART(YEAR, data_emprestimo) AS Ano,
-		DATEPART(WEEKDAY, data_emprestimo) AS DiaSemana,
-		DATENAME(WEEKDAY, data_Emprestimo) AS NomeDiaSemana,
-		DATENAME(MONTH, data_emprestimo) AS NomeMes
+	DATEPART(WEEKDAY, data_emprestimo) AS DiaSemana,
+	DATENAME(WEEKDAY, data_Emprestimo) AS NomeDiaSemana,
+	DATENAME(MONTH, data_emprestimo) AS NomeMes
 FROM Emprestimo;
 
 

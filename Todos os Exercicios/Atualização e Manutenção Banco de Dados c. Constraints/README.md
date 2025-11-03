@@ -9,7 +9,7 @@
 ---
 
 ##Exclusão de registros** 
- – usar DELETE respeitando as restrições de chave estrangeira. **INCOMPLETO**
+ – usar DELETE respeitando as restrições de chave estrangeira. **CONCLUIDO**
 
 ---
 
@@ -23,7 +23,7 @@
 ---
 
 **Manipulação de constraints** 
- - remover e recriar chaves primárias e chaves estrangeiras, testando o uso de ON DELETE CASCADE. **INCOMPLETO**
+ - remover e recriar chaves primárias e chaves estrangeiras, testando o uso de ON DELETE CASCADE. **CONCLUIDO**
 
 **Verificação** 
- – rodar consultas SELECT para conferir os resultados das alterações realizadas.**INCOMPLETO**
+ – rodar consultas SELECT para conferir os resultados das alterações realizadas.**INCOMPCONCLUIDOLETO**
