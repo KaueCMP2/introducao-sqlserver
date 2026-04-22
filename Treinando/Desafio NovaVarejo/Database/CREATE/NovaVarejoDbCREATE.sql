@@ -25,6 +25,13 @@ CREATE TABLE Cidade
 );
 GO
 
+CREATE TABLE TipoALteracao
+(
+	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+	NomeTipo VARCHAR(20)
+);
+GO
+
 CREATE TABLE CargoUsuario
 (
 	CargoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -71,13 +78,6 @@ CREATE TABLE EnderecoUsuario
 );
 GO
 
-CREATE TABLE TipoALteracaoUsuario
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
-);
-GO
-
 CREATE TABLE LogUsuario
 (
 	LogUsuarioId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -85,7 +85,7 @@ CREATE TABLE LogUsuario
 	StatusUsuarioId UNIQUEIDENTIFIER NOT NULL,
 	CargoUsuarioId UNIQUEIDENTIFIER NOT NULL,
 	EnderecoUsuarioId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+	TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	NomeUsuario NVARCHAR(50),
 	Email VARCHAR(255) UNIQUE,
 	Senha VARBINARY(32) NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE LogUsuario
 	DataNascimento DATETIME2, 
 	DataLog DATETIME2 DEFAULT GETDATE(),
 
-	CONSTRAINT FK_LogUsuario_TipoAlteracaoUsuario_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoUsuario(TipoAlteracaoId),
+	CONSTRAINT FK_LogUsuario_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogUsuario_Usuario_UsuarioId FOREIGN KEY (UsuarioId) REFERENCES Usuario(UsuarioId),
 	CONSTRAINT FK_LogUsuario_StatusUsuario_StatusId FOREIGN KEY (StatusUsuarioId) REFERENCES StatusUsuario(StatusUsuarioId),
 	CONSTRAINT FK_LogUsuario_CargoUsuario_CargoId FOREIGN KEY (CargoUsuarioID) REFERENCES CargoUsuario(CargoId),
@@ -139,21 +139,14 @@ CREATE TABLE Carrinho
 );
 GO
 
-CREATE TABLE TipoALteracaoCarrinho
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
-);
-GO
-
 CREATE TABLE LogCarrinho
 (
 	CarrinhoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	ProdutoId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+	TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	DataLog DATETIME2 DEFAULT GETDATE(),
 
-	CONSTRAINT FK_LogCarrinho_TipoAlteracaoCarrinho_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoCarrinho(TipoAlteracaoId),
+	CONSTRAINT FK_LogCarrinho_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogCarrinho_Produto_ProdutoId FOREIGN KEY (ProdutoId) REFERENCES Produto(ProdutoId)
 
 );
@@ -168,22 +161,15 @@ CREATE TABLE EstoqueProduto
 );
 GO
 
-CREATE TABLE TipoALteracaoEstoqueProduto
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
-);
-GO
-
 CREATE TABLE LogEstoqueProduto
 (
 	LogEstoqueProdutoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	UnidadeProdutoId UNIQUEIDENTIFIER NOT NULL,
 	ProdutoId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	DataLog DATETIME2 DEFAULT GETDATE(),
 
-	CONSTRAINT FK_LogEstoqueProduto_TipoAlteracaoEstoqueProduto_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoEstoqueProduto(TipoAlteracaoId),
+	CONSTRAINT FK_LogEstoqueProduto_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogEstoqueProduto_EstoqueProduto_UnidadeProdutoId FOREIGN KEY (UnidadeProdutoId) REFERENCES EstoqueProduto(UnidadeProdutoId),
 	CONSTRAINT FK_LogEstoqueProduto_Produto_ProdutoId FOREIGN KEY (ProdutoId) REFERENCES Produto(ProdutoId)
 );
@@ -209,22 +195,15 @@ CREATE TABLE Pedido
 );
 GO
 
-CREATE TABLE TipoALteracaoPedido
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
-);
-GO
-
 CREATE TABLE LogPedido
 (
 	LogPedidoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	UsuarioId UNIQUEIDENTIFIER NOT NULL,
 	EnderecoUsuarioId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	StatusPedidoId UNIQUEIDENTIFIER NOT NULL,
 
-	CONSTRAINT FK_LogPedido_TipoAlteracaoPedido_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoPedido(TipoAlteracaoId),
+	CONSTRAINT FK_LogPedido_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogPedido_Usuario_UsuarioId FOREIGN KEY (UsuarioId) REFERENCES Usuario(UsuarioId),
 	CONSTRAINT FK_LogPedido_EnderecoUsuario_EnderecoUsuarioId FOREIGN KEY (EnderecoUsuarioId) REFERENCES EnderecoUsuario(EnderecoUsuarioId),
 	CONSTRAINT FK_LogPedido_StatusPedido_StatusPedidoId FOREIGN KEY (StatusPedidoId) REFERENCES StatusPedido(StatusPedidoId),
@@ -272,23 +251,16 @@ CREATE TABLE Pagamento
 );
 GO
 
-CREATE TABLE TipoALteracaoPagamento
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
-);
-GO
-
 CREATE TABLE LogPagamento
 (
 	LogPagamentoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	Valor DECIMAL(10, 2),
 	PedidoId UNIQUEIDENTIFIER NOT NULL,
 	StatusPagamentoId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+	TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	DataLog DATETIME2 DEFAULT GETDATE(),
 
-	CONSTRAINT FK_LogPagamento_TipoAlteracaoPagamento_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoPagamento(TipoAlteracaoId),
+	CONSTRAINT FK_LogPagamento_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogPagamento_Pedido_PedidoId FOREIGN KEY (PedidoId) REFERENCES Pedido(PedidoId),
 	CONSTRAINT FK_LogPagamento_StatusPagamento_StatusPagamentoId FOREIGN KEY (StatusPagamentoId) REFERENCES StatusPagamento(StatusPagamentoId),
 );
@@ -306,16 +278,10 @@ CREATE TABLE Entrega
 	EntregaId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	PedidoId UNIQUEIDENTIFIER NOT NULL,
 	StatusEntregaId UNIQUEIDENTIFIER NOT NULL,
+	CodigoRastreio VARCHAR(7) NULL
 
 	CONSTRAINT FK_Entrega_Pedido_PedidoId FOREIGN KEY (PedidoId) REFERENCES Pedido(PedidoId),
 	CONSTRAINT FK_Entrega_StatusEntrega_StatusEntregaId FOREIGN KEY (StatusEntregaId) REFERENCES StatusEntrega(StatusEntregaId),
-);
-GO
-
-CREATE TABLE TipoALteracaoEntrega
-(
-	TipoAlteracaoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-	NomeTipo VARCHAR(20)
 );
 GO
 
@@ -324,10 +290,10 @@ CREATE TABLE LogEntrega
 	LogEntregaId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
 	EntregaId UNIQUEIDENTIFIER NOT NULL,
 	PedidoId UNIQUEIDENTIFIER NOT NULL,
-	AlteracaoId UNIQUEIDENTIFIER NOT NULL,
+	TipoAlteracaoId UNIQUEIDENTIFIER NOT NULL,
 	StatusEntregaId UNIQUEIDENTIFIER NOT NULL,
 
-	CONSTRAINT FK_LogEntrega_TipoAlteracaoEntrega_TipoAlteracaoId FOREIGN KEY (AlteracaoId) REFERENCES TipoAlteracaoEntrega(TipoAlteracaoId),
+	CONSTRAINT FK_LogEntrega_TipoAlteracao_TipoAlteracaoId FOREIGN KEY (TipoAlteracaoId) REFERENCES TipoAlteracao(TipoAlteracaoId),
 	CONSTRAINT FK_LogEntrega_Pedido_PedidoId FOREIGN KEY (PedidoId) REFERENCES Pedido(PedidoId),
 	CONSTRAINT FK_LogEntrega_StatusEntrega_StatusEntregaId FOREIGN KEY (StatusEntregaId) REFERENCES StatusEntrega(StatusEntregaId),
 )
